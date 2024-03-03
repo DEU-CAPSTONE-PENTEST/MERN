@@ -1,6 +1,0 @@
-// ESLint, JavaScript kodunun kalitesini artırmak, hata ayıklamak ve tutarlılık sağlamak için kullanılan bir araçtır. 
-
-
-{
-    "extends":"react-app"
-}
