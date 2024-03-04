@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { resetToken } from "../app/features/auth/authSlice";
 const Header = () => {
@@ -11,17 +11,13 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-gray-50 dark:bg-gray-900 p-4 ">
+    <nav className=" p-4 ">
       <div className="flex items-center justify-between tracking-wider ">
         <NavLink
           to="/"
-          className="text-2xl font-semibold text-gray-900 gap-3  justify-center align-middle  dark:text-white flex"
+          className="text-2xl font-semibold text-gray-900  dark:text-white grid items-center grid-flow-col"
         >
-          <img
-            className="w-12 h-12   rounded-full mr-2"
-            src={logo}
-            alt="logo"
-          />
+          <img className="w-12 h-12   rounded-full " src={logo} alt="logo" />
           AlazSec
         </NavLink>
         <div className="flex space-x-4">

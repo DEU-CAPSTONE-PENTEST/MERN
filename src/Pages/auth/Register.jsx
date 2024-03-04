@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "../../Components/ui/alert";
+import { RocketIcon } from "@radix-ui/react-icons";
 import { registerUser } from "../../app/features/auth/authActions";
 import Spinner from "../../Components/Spinner";
-import Error from "../../Components/Error";
 import { useEffect } from "react";
+import logo from "../../assets/logo.svg";
+import { Button } from "@/Components/ui/button";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,7 +20,7 @@ const Register = () => {
     if (success) {
       navigate("/auth/login"); // Yönlendirilecek sayfanın URL'sini buraya ekleyin
     }
-  }, [success]);
+  }, [success, navigate]);
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -50,17 +55,13 @@ const Register = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-10">
-      <div className="flex flex-col items-center justify-center  py-8 mx-auto  lg:py-0 ">
+    <section className="mt-16">
+      <div className="flex flex-col  items-center  mx-auto md:h-screen lg:py-0 ">
         <Link
           to="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+          className="flex items-center text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          <img
-            className="w-8 h-8 mr-2 rounded-full"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
+          <img className="w-24 h-24  rounded-full" src={logo} alt="logo" />
           AlazSec
         </Link>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
@@ -68,13 +69,19 @@ const Register = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create an account
             </h1>
-            <form className="space-y-4 md:space-y-4 " onSubmit={handleSubmit}>
-              {error && <Error>{error}</Error>}
-              <div>
-                <label htmlFor="firstName" className="register-label">
+            <form className="space-y-5 md:space-y-4 " onSubmit={handleSubmit}>
+              {error && (
+                <Alert>
+                  <RocketIcon className="h-4 w-4" />
+                  <AlertTitle>Error!</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="firstName" className="register-label">
                   First Name
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   name="firstname"
                   id="firstname"
@@ -85,11 +92,11 @@ const Register = () => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="firstName" className="register-label">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="firstName" className="register-label">
                   Last Name
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   name="lastname"
                   id="lastname"
@@ -100,11 +107,11 @@ const Register = () => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="email" className="register-label">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="email" className="register-label">
                   Your email
-                </label>
-                <input
+                </Label>
+                <Input
                   type="email"
                   name="email"
                   id="email"
@@ -115,11 +122,11 @@ const Register = () => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="password" className="register-label">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="password" className="register-label">
                   Password
-                </label>
-                <input
+                </Label>
+                <Input
                   type="password"
                   name="password"
                   id="password"
@@ -130,11 +137,11 @@ const Register = () => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="confirm-password" className="register-label">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="confirm-password" className="register-label">
                   Confirm password
-                </label>
-                <input
+                </Label>
+                <Input
                   type="password"
                   name="confirmPassword"
                   id="confirm-password"
@@ -147,7 +154,7 @@ const Register = () => {
               </div>
               <div className="flex items-start">
                 <div className="flex items-center h-5">
-                  <input
+                  <Input
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
@@ -156,7 +163,7 @@ const Register = () => {
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label
+                  <Label
                     htmlFor="terms"
                     className="font-light text-gray-500 dark:text-gray-300"
                   >
@@ -167,16 +174,16 @@ const Register = () => {
                     >
                       Terms and Conditions
                     </a>
-                  </label>
+                  </Label>
                 </div>
               </div>
-              <button
+              <Button
                 type="submit"
                 className="register-button"
                 disabled={loading}
               >
                 {loading ? <Spinner /> : "Create an account"}
-              </button>
+              </Button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link

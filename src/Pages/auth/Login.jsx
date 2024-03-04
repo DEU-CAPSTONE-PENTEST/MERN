@@ -4,8 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../app/features/auth/authActions";
 import Spinner from "../../Components/Spinner";
-import Error from "../../Components/Error";
-import logo from "../../assets/logo.jpeg";
+import logo from "../../assets/logo.svg";
+import { Button } from "@/Components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "../../Components/ui/alert";
+import { RocketIcon } from "@radix-ui/react-icons";
+import { Label } from "../../Components/ui/label";
+import { Input } from "@/Components/ui/input";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,7 +20,7 @@ const Login = () => {
     if (success) {
       navigate("/user/dashboard"); // Yönlendirilecek sayfanın URL'sini buraya ekleyin
     }
-  }, [success]);
+  }, [success, navigate]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,13 +42,13 @@ const Login = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    <section className="mt-16">
+      <div className="flex flex-col  items-center  mx-auto md:h-screen lg:py-0">
         <Link
           to="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+          className="flex items-center text-2xl font-semibold text-gray-900 dark:text-white"
         >
-          <img className="w-24 h-24  rounded-full mr-2" src={logo} alt="logo" />
+          <img className="w-24 h-24  rounded-full " src={logo} alt="logo" />
           AlazSec
         </Link>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -52,15 +57,21 @@ const Login = () => {
               Sign in to your account
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              {error && <Error>{error}</Error>}
-              <div>
-                <label
+              {error && (
+                <Alert>
+                  <RocketIcon className="h-4 w-4" />
+                  <AlertTitle>Error!</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <div className="flex flex-col gap-1">
+                <Label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your email
-                </label>
-                <input
+                </Label>
+                <Input
                   type="email"
                   name="email"
                   id="email"
@@ -70,11 +81,11 @@ const Login = () => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="password" className="register-label">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="password" className="register-label">
                   Password
-                </label>
-                <input
+                </Label>
+                <Input
                   type="password"
                   name="password"
                   id="password"
@@ -85,13 +96,13 @@ const Login = () => {
                 />
               </div>
 
-              <button
+              <Button
                 type="submit"
                 className="register-button"
                 disabled={loading}
               >
                 {loading ? <Spinner /> : "Sign in"}
-              </button>
+              </Button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <Link

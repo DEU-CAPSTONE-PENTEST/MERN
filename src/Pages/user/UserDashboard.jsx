@@ -4,9 +4,9 @@ const UserDashboard = () => {
   const { userInfo } = useSelector((state) => state.auth);
   return (
     <>
-      <div className="text-white">UserDashboard Page</div>
+      <div className="">UserDashboard Page</div>
 
-      <h1 className="text-white p-10">
+      <h1 className=" p-10">
         {userInfo.firstname}-{userInfo.lastname}
       </h1>
     </>
