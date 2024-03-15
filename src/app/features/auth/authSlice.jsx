@@ -23,7 +23,6 @@ const authSlice = createSlice({
   reducers: {
     checkCookie: (state) => {
       const availableToken = cookie.get("token");
-      console.log(availableToken);
       if (availableToken) {
         state.userToken = availableToken;
       } else {
@@ -31,7 +30,6 @@ const authSlice = createSlice({
       }
     },
     resetToken: (state) => {
-      console.log("resette");
       state.userToken = null;
       state.loading = false;
       state.error = null;

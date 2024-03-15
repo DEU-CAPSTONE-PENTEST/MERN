@@ -15,10 +15,9 @@ const Register = () => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.auth);
 
-  // success durumu true olduğunda yönlendirme
   useEffect(() => {
     if (success) {
-      navigate("/auth/login"); // Yönlendirilecek sayfanın URL'sini buraya ekleyin
+      navigate("/auth/login");
     }
   }, [success, navigate]);
 
@@ -55,17 +54,17 @@ const Register = () => {
   };
 
   return (
-    <section className="mt-16">
-      <div className="flex flex-col  items-center  mx-auto md:h-screen lg:py-0 ">
+    <section className="mt-14 mb-24 ">
+      <div className="flex flex-col  items-center   mx-auto md:h-screen lg:py-0 ">
         <Link
           to="/"
-          className="flex items-center text-2xl font-semibold text-gray-900 dark:text-white"
+          className="flex items-center text-4xl font-semibold text-gray-900 dark:text-white"
         >
           <img className="w-24 h-24  rounded-full" src={logo} alt="logo" />
           AlazSec
         </Link>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 ">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create an account
             </h1>
@@ -78,7 +77,7 @@ const Register = () => {
                 </Alert>
               )}
               <div className="flex flex-col gap-1">
-                <Label htmlFor="firstName" className="register-label">
+                <Label htmlFor="firstName" className="text-lg">
                   First Name
                 </Label>
                 <Input
@@ -93,7 +92,7 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="firstName" className="register-label">
+                <Label htmlFor="firstName" className="text-lg">
                   Last Name
                 </Label>
                 <Input
@@ -108,7 +107,7 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="email" className="register-label">
+                <Label htmlFor="email" className="text-lg">
                   Your email
                 </Label>
                 <Input
@@ -123,7 +122,7 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="password" className="register-label">
+                <Label htmlFor="password" className="text-lg">
                   Password
                 </Label>
                 <Input
@@ -138,7 +137,7 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="confirm-password" className="register-label">
+                <Label htmlFor="confirm-password" className="text-lg">
                   Confirm password
                 </Label>
                 <Input
@@ -179,16 +178,16 @@ const Register = () => {
               </div>
               <Button
                 type="submit"
-                className="register-button"
+                className="w-full text-lg"
                 disabled={loading}
               >
                 {loading ? <Spinner /> : "Create an account"}
               </Button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <p className="text-l font-light text-gray-500 dark:text-gray-400 text-lg">
                 Already have an account?{" "}
                 <Link
                   to="/auth/login"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500 text-xl"
                 >
                   Sign in here
                 </Link>

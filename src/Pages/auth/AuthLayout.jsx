@@ -8,7 +8,7 @@ const AuthLaout = () => {
 
   useEffect(() => {
     if (userToken) {
-      navigate("/");
+      navigate("/user/dashboard");
     }
   }, [userToken, navigate]);
 
