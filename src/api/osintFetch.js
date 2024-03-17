@@ -9,9 +9,9 @@ const api = axios.create({
   },
 });
 
-export const startOsint = async ({ url, user }) => {
+export const startOsint = async (data) => {
   try {
-    const response = await api.post("/osint", { url, user });
+    const response = await api.post("/osint", data);
     return response.data;
   } catch (error) {
     throw error.response.data.message || error.message;

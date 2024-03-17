@@ -2,15 +2,26 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { useState } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { startOsintAsync } from "@/app/features/osint/osintAction";
 const Osint = () => {
-  const [url, setUrl] = useState("");
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.osint);
+  const [formdata, setFormdata] = useState({
+    url: "",
+    user: null,
+  });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // URL'i kullanarak yapmak istediğiniz işlemleri buraya ekleyebilirsiniz.
-    console.log("Gönderilen URL:", url);
+    if (formdata.url === "" || !userInfo._id) {
+      alert("Please enter url");
+      return;
+    }
+    formdata.user = userInfo._id;
+    dispatch(startOsintAsync(formdata));
+    setFormdata({ url: "", user: null });
   };
 
   return (
@@ -33,15 +44,15 @@ const Osint = () => {
                 type="text"
                 name="url"
                 id="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                value={formdata.url}
+                onChange={(e) => setFormdata({ url: e.target.value })}
                 placeholder="https://example.com"
                 required
               />
             </div>
 
-            <Button type="submit" className="w-full text-lg">
-              Get OSINT
+            <Button type="submit" className="w-full text-lg" disabled={loading}>
+              {loading ? "Osint Starting..." : "Get OSINT"}
             </Button>
           </form>
         </div>

@@ -20,7 +20,7 @@ const Home = () => {
           </p>
           <div className="p-5 mt-4 ">
             <Link
-              to="/user/dashboard"
+              to="/user/osint"
               className="text-xl px-14 py-2  bg-blue-600 text-white rounded-2xl"
             >
               Try Now
