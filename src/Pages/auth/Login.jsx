@@ -42,11 +42,11 @@ const Login = () => {
   };
 
   return (
-    <section className="mt-16">
+    <section className="mt-16 ">
       <div className="flex flex-col  items-center  mx-auto md:h-screen lg:py-0">
         <Link
           to="/"
-          className="flex items-center text-2xl font-semibold text-gray-900 dark:text-white"
+          className="flex items-center text-4xl font-semibold text-gray-900 dark:text-white"
         >
           <img className="w-24 h-24  rounded-full " src={logo} alt="logo" />
           AlazSec
@@ -65,10 +65,7 @@ const Login = () => {
                 </Alert>
               )}
               <div className="flex flex-col gap-1">
-                <Label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
+                <Label htmlFor="email" className="text-lg">
                   Your email
                 </Label>
                 <Input
@@ -82,7 +79,7 @@ const Login = () => {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <Label htmlFor="password" className="register-label">
+                <Label htmlFor="password" className="text-lg">
                   Password
                 </Label>
                 <Input
@@ -96,18 +93,14 @@ const Login = () => {
                 />
               </div>
 
-              <Button
-                type="submit"
-                className="register-button"
-                disabled={loading}
-              >
+              <Button type="submit" disabled={loading}>
                 {loading ? <Spinner /> : "Sign in"}
               </Button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <p className=" font-light text-gray-500 dark:text-gray-400 text-lg">
                 Don’t have an account yet?{" "}
                 <Link
                   to="/auth/register"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500 text-lg"
                 >
                   Sign up
                 </Link>
