@@ -8,6 +8,7 @@ import Register from "./Pages/auth/Register";
 import Contact from "./Pages/home/Contact";
 import Home from "./Pages/home/Home";
 import HomeLayout from "./Pages/home/HomeLayout";
+import Details from "./Pages/user/Details";
 import Osint from "./Pages/user/Osint";
 import UserDashboard from "./Pages/user/UserDashboard";
 import UserLayout from "./Pages/user/UserLayout";
@@ -35,6 +36,11 @@ const routes = [
           {
             path: "dashboard",
             element: <UserDashboard />,
+            auth: true,
+          },
+          {
+            path: "dashboard/:id",
+            element: <Details />,
             auth: true,
           },
           {

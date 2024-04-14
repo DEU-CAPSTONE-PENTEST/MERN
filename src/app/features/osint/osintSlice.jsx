@@ -6,9 +6,16 @@ const osintSlice = createSlice({
   initialState: {
     loading: localStorage.getItem("loading") === "true" || false,
     error: null,
-    response: "",
+    response: null,
   },
-  reducers: {},
+  reducers: {
+    resetResponse: (state) => {
+      state.response = null;
+    },
+    resetError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(startOsintAsync.pending, (state) => {
@@ -18,7 +25,6 @@ const osintSlice = createSlice({
       .addCase(startOsintAsync.fulfilled, (state, { payload }) => {
         localStorage.setItem("loading", false);
         state.loading = false;
-        console.log(payload);
         state.response = payload;
       })
       .addCase(startOsintAsync.rejected, (state, action) => {
@@ -30,3 +36,4 @@ const osintSlice = createSlice({
 });
 
 export default osintSlice.reducer;
+export const { resetResponse, resetError } = osintSlice.actions;

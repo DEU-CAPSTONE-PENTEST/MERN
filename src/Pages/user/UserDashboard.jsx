@@ -14,48 +14,68 @@ import {
   TableRow,
 } from "../../Components/ui/table";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getAllOsints } from "../../api/osintFetch";
+import { Input } from "@/Components/ui/input";
 
 const UserDashboard = () => {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "https://www.google.com",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "https://chat.openai.com",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "https://coderspace.io/",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod:
-        "https://opportunities.vodafone.com/job/Istanbul-Vodafone-Turkey-Discover-Graduate-Program-2024/1032963501/",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "https://www.deepl.com/",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "https://www.hackerrank.com",
-    },
-  ];
+  const [osints, setOsints] = useState(null);
+  const [filterData, setFilterData] = useState(null);
+  const [filterStatus, setFilterStatus] = useState("All");
   const { userInfo } = useSelector((state) => state.auth);
+  const [status, setStatus] = useState({
+    total: 0,
+    scanning: 0,
+    completed: 0,
+  });
+
+  useEffect(() => {
+    const fetchOsints = async () => {
+      const data = await getAllOsints(userInfo._id);
+      setOsints(data.message);
+      setFilterData(data.message); // filterData'yı osints'in kendisiyle başlat
+      const countNullComments = (data) => {
+        let scanningCount = 0;
+        data.forEach((item) => {
+          if (item.comment === null) {
+            scanningCount++;
+          }
+        });
+        return scanningCount;
+      };
+      setStatus({
+        total: data.message.length,
+        scanning: countNullComments(data.message),
+        completed: data.message.length - countNullComments(data.message),
+      });
+    };
+
+    fetchOsints();
+  }, [userInfo]);
+
+  const onChange = (e) => {
+    const searchText = e.target.value;
+    if (searchText === "") {
+      setFilterData(osints);
+    } else {
+      setFilterData(osints.filter((data) => data.url.includes(searchText)));
+    }
+  };
+
+  const handleFilterChange = (selectedStatus) => {
+    setFilterStatus(selectedStatus);
+    if (selectedStatus === "All") {
+      setFilterData(osints);
+    } else {
+      setFilterData(
+        osints.filter((data) =>
+          selectedStatus === "Scanning"
+            ? data.comment === null
+            : data.comment !== null
+        )
+      );
+    }
+  };
   return (
     <div>
       <div className="w-4/5 mx-auto">
@@ -71,7 +91,7 @@ const UserDashboard = () => {
                   Total Osint
                 </h3>
               </div>
-              <div className="p-6 pt-0 text-xl">14</div>
+              <div className="p-6 pt-0 text-xl">{status.total}</div>
             </div>
             <div className="grid">
               <img
@@ -84,10 +104,10 @@ const UserDashboard = () => {
             <div>
               <div className="p-6 w-40 flex flex-row items-center justify-between space-y-0 pb-2">
                 <h3 className="tracking-tight text-sm font-medium">
-                  Pending Osint
+                  Scanning Osint
                 </h3>
               </div>
-              <div className="p-6 pt-0 text-xl">2</div>
+              <div className="p-6 pt-0 text-xl">{status.scanning}</div>
             </div>
             <div className="grid">
               <img
@@ -103,7 +123,7 @@ const UserDashboard = () => {
                   Completed Osint
                 </h3>
               </div>
-              <div className="p-6 pt-0 text-xl">12</div>
+              <div className="p-6 pt-0 text-xl">{status.completed}</div>
             </div>
             <div className="grid">
               <img
@@ -120,38 +140,69 @@ const UserDashboard = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Count</TableHead>
-              <TableHead>URL</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>
+                <div className="flex  gap-5">
+                  <span className="my-auto">URL</span>
+                  <Input
+                    placeholder="Search"
+                    className="w-1/5 my-auto"
+                    onChange={(e) => onChange(e)}
+                  />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="w-4/5 text-start">
+                  <div className="my-4">
+                    <span className="mr-5">Status</span>
+
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => handleFilterChange(e.target.value)}
+                      className="px-2 py-1 border rounded-md focus:outline-none"
+                    >
+                      <option value="All">All</option>
+                      <option value="Scanning">Scanning</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+              </TableHead>
               <TableHead className="text-right">Details</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell className="text-right">
-                  {invoice.paymentStatus === "Pending" ? (
-                    <div className="flex justify-end">
-                      <img
-                        src={redFinger}
-                        alt="details"
-                        className="h-10 w-10 text-muted-foreground my-auto "
-                      />
-                    </div>
-                  ) : (
-                    <Link to="/" className="flex justify-end">
-                      <img
-                        src={greenFinger}
-                        alt="details"
-                        className="h-10 w-10 text-muted-foreground my-auto "
-                      />
-                    </Link>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {filterData &&
+              filterData.map((osint, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
+                  <TableCell>{osint.url}</TableCell>
+                  <TableCell>
+                    {osint.comment ? "Completed" : "Scanning"}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {osint.comment === null ? (
+                      <div className="flex justify-end">
+                        <img
+                          src={redFinger}
+                          alt="details"
+                          className="h-10 w-10 text-muted-foreground my-auto "
+                        />
+                      </div>
+                    ) : (
+                      <Link
+                        to={`/user/dashboard/${osint.comment}`}
+                        className="flex justify-end"
+                      >
+                        <img
+                          src={greenFinger}
+                          alt="details"
+                          className="h-10 w-10 text-muted-foreground my-auto "
+                        />
+                      </Link>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

@@ -5,13 +5,11 @@ import jwt_Decode from "../../../utils/jwtDecode";
 const cookie = new Cookies();
 
 //resetToken gibi checkCookie fonksiyonu oluştur Cookie.get ile kontrol et
-const token = cookie.get("token");
-const userInfo = token ? jwt_Decode(token).data : null;
 
 const initialState = {
   loading: false,
-  userInfo: userInfo,
-  userToken: token || null,
+  userInfo: null,
+  userToken: null,
   error: null,
   success: false,
 };
@@ -23,13 +21,17 @@ const authSlice = createSlice({
   reducers: {
     checkCookie: (state) => {
       const availableToken = cookie.get("token");
+
       if (availableToken) {
         state.userToken = availableToken;
+        state.userInfo = jwt_Decode(availableToken).data;
       } else {
         state.userToken = null;
+        state.userInfo = null;
       }
     },
     resetToken: (state) => {
+      console.log("içerde", state.userToken);
       state.userToken = null;
       state.loading = false;
       state.error = null;
@@ -37,6 +39,7 @@ const authSlice = createSlice({
       cookie.remove("token");
     },
   },
+
   extraReducers: (builder) => {
     // registerUser asenkron eyleminin durumlarına tepki gösteren ek reducer'lar
     builder

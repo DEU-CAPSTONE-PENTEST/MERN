@@ -10,7 +10,7 @@ const Home = () => {
     <>
       {/* HEADER */}
       <header className="w-4/5 mx-auto h-screen flex">
-        <motion.div className="flex-1 flex flex-col mt-28">
+        <motion.div className="flex-1 flex flex-col lg:mt-48">
           <h1 className="p-5 text-6xl">AI-assisted OSINT</h1>
           <p className="px-5 text-xl">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error,
@@ -21,7 +21,7 @@ const Home = () => {
           <div className="p-5 mt-4 ">
             <Link
               to="/user/osint"
-              className="text-xl px-14 py-2  bg-blue-600 text-white rounded-2xl"
+              className="text-xl px-14 py-2  bg-blue-600 text-white rounded-2xl hover:bg-blue-500 transition"
             >
               Try Now
             </Link>

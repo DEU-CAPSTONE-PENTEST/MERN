@@ -7,10 +7,9 @@ export const startOsintAsync = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await osintService.startOsint(formData);
-      console.log(response);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || error.message);
+      return rejectWithValue(error);
     }
   }
 );

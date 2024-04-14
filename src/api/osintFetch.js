@@ -17,3 +17,25 @@ export const startOsint = async (data) => {
     throw error.response.data.message || error.message;
   }
 };
+
+export const getAllOsints = async (userID) => {
+  try {
+    const data = { user: userID };
+
+    const response = await api.post("/osint/urls", data); // Passing data as params
+    return response.data;
+  } catch (error) {
+    throw error.response.data.message || error.message;
+  }
+};
+
+export const getComment = async (commentID) => {
+  try {
+    const url = `/osint/urls/${commentID}`;
+
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    throw error.response.data.message || error.message;
+  }
+};

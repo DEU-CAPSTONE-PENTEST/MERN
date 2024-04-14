@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <section className="mt-16 ">
+    <section className="mt-32 ">
       <div className="flex flex-col  items-center  mx-auto md:h-screen lg:py-0">
         <Link
           to="/"
