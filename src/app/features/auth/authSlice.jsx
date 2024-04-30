@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, loginUser } from "./authActions";
 import Cookies from "universal-cookie";
 import jwt_Decode from "../../../utils/jwtDecode";
-const cookie = new Cookies();
+const cookie = new Cookies(null, { path: "/" });
 
 //resetToken gibi checkCookie fonksiyonu oluştur Cookie.get ile kontrol et
 
@@ -21,7 +21,6 @@ const authSlice = createSlice({
   reducers: {
     checkCookie: (state) => {
       const availableToken = cookie.get("token");
-
       if (availableToken) {
         state.userToken = availableToken;
         state.userInfo = jwt_Decode(availableToken).data;
@@ -31,7 +30,6 @@ const authSlice = createSlice({
       }
     },
     resetToken: (state) => {
-      console.log("içerde", state.userToken);
       state.userToken = null;
       state.loading = false;
       state.error = null;

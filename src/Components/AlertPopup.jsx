@@ -40,7 +40,7 @@ export default function AlertPopup() {
         <AlertDialog open={open} onClose={handleOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>Osint Started</AlertDialogTitle>
               <AlertDialogDescription>
                 {response.message}
               </AlertDialogDescription>

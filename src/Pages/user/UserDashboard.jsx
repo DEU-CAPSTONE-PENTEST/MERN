@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import pending from "../../assets/pending.svg";
 import completed from "../../assets/complated.svg";
 import total from "../../assets/total.svg";
@@ -17,8 +17,11 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAllOsints } from "../../api/osintFetch";
 import { Input } from "@/Components/ui/input";
+import { checkCookie } from "../../app/features/auth/authSlice";
 
 const UserDashboard = () => {
+  const dispatch = useDispatch();
+
   const [osints, setOsints] = useState(null);
   const [filterData, setFilterData] = useState(null);
   const [filterStatus, setFilterStatus] = useState("All");
@@ -31,6 +34,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     const fetchOsints = async () => {
+      dispatch(checkCookie());
       const data = await getAllOsints(userInfo._id);
       setOsints(data.message);
       setFilterData(data.message); // filterData'yı osints'in kendisiyle başlat
@@ -51,7 +55,7 @@ const UserDashboard = () => {
     };
 
     fetchOsints();
-  }, [userInfo]);
+  }, []);
 
   const onChange = (e) => {
     const searchText = e.target.value;

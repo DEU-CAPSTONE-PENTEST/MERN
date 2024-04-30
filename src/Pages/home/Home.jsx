@@ -10,13 +10,13 @@ const Home = () => {
     <>
       {/* HEADER */}
       <header className="w-4/5 mx-auto h-screen flex">
-        <motion.div className="flex-1 flex flex-col lg:mt-48">
+        <motion.div className="flex-1 flex flex-col justify-center mb-52">
           <h1 className="p-5 text-6xl">AI-assisted OSINT</h1>
           <p className="px-5 text-xl">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error,
             dolorem. Omnis dignissimos possimus ea odio odit nobis deleniti
             voluptatem quam, beatae asperiores maxime labore tempora aliquam eos
-            saepe. Laudantium, recusandae!
+            saepe. Laudantium, recus andae!
           </p>
           <div className="p-5 mt-4 ">
             <Link
@@ -28,11 +28,11 @@ const Home = () => {
           </div>
         </motion.div>
         <motion.div
-          className="w-4/5 flex-1 mt-20"
+          className="w-4/5 flex-1 my-auto"
           animate={{ y: [0, -10, 10, -10, 10, 0] }}
           transition={{ repeat: Infinity, duration: 13 }}
         >
-          <img src={homePng} alt="homePng" className="w-full" />
+          <img src={homePng} alt="homePng" className="w-full mb-48" />
         </motion.div>
       </header>
 

@@ -1,6 +1,7 @@
 import { getComment } from "../../api/osintFetch";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import backIcon from "../../assets/back.png";
 import {
   Table,
   TableBody,
@@ -12,116 +13,99 @@ const Details = () => {
   const { id } = useParams();
   const [data, setdata] = useState(null);
 
+  function getClassnameForSeverity(severity) {
+    switch (severity) {
+      case "low":
+        return "text-green-600 m-2 font-semibold"; // Düşük ciddiyet için yeşil renk
+      case "medium":
+        return "text-yellow-600 m-2 font-semibold"; // Orta ciddiyet için sarı renk
+      case "high":
+        return "text-orange-600 m-2 font-semibold"; // Yüksek ciddiyet için kırmızı renk
+      default:
+        return "text-red-600 m-2 font-semibold"; // Varsayılan olarak gri renk
+    }
+  }
+
   useEffect(() => {
     const fetchComment = async () => {
       const response = await getComment(id);
-      const rawData = response.message.comment.split("```")[1];
-      const splitData = rawData.split("json")[1];
-      setdata(JSON.parse(splitData));
+
+      const jsonString = response.message.comment.trim(); // Trim unnecessary whitespace
+      const jsonObject = JSON.parse(jsonString);
+      setdata(jsonObject);
     };
     fetchComment();
   }, [id]);
   return (
     <>
       {data && (
-        <Table className="m-10 w-4/5 mx-auto">
-          <TableCaption>Rapor Detayları</TableCaption>
+        <Table className="mt-20 w-4/5 mx-auto text-lg">
+          <span className=" absolute top-10 left-20">
+            <Link to="/user/dashboard">
+              <img src={backIcon} alt="back" className="h-10 w-10" />
+            </Link>
+          </span>
+          <TableCaption>Report Details</TableCaption>
           <TableBody>
             <TableRow>
-              <TableCell className="font-bold">Rapor Tarihi</TableCell>
-              <TableCell>{data.rapor_tarihi}</TableCell>
+              <TableCell className="font-bold">Report Date</TableCell>
+              <TableCell>{data.raport_date.split(" ")[0]}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-bold">Giriş</TableCell>
-              <TableCell>{data.giris}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-bold">Kullanılan Araçlar</TableCell>
+              <TableCell className="font-bold ">Findings</TableCell>
               <TableCell>
                 <ul>
-                  {data.kullanilan_araclar.map((araclar, index) => (
-                    <li key={index}>{araclar}</li>
-                  ))}
-                </ul>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-bold">Bulgular</TableCell>
-              <TableCell>
-                {data.bulgular.bilgiler &&
-                  data.bulgular.bilgiler.map((bilgi, index) => (
-                    <div key={index}>
-                      <h3>{bilgi.baslik}</h3>
-                      <ul>
-                        {bilgi.icerik.map((item, i) => (
-                          <li key={i}>
-                            Port: {item.port}, Protokol: {item.protokol},
-                            Servis: {item.servis}
-                            <ul>
-                              {item.ek_bilgiler &&
-                                item.ek_bilgiler.map((bilgi, j) => (
-                                  <li key={j}>{bilgi}</li>
-                                ))}
-                            </ul>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-bold">Güvenlik Açıkları</TableCell>
-              <TableCell>
-                <h3>Kritik</h3>
-                <ul>
-                  {data.guvenlik_aciklari.kritik.length === 0 ? (
-                    <li>Yok</li>
-                  ) : (
-                    data.guvenlik_aciklari.kritik.map((acik, index) => (
+                  {Object.entries(data.findings).map(
+                    ([severity, findings], index) => (
                       <li key={index}>
-                        {acik.baslik}, Risk Düzeyi: {acik.risk_duzeyi}, Bulgu:{" "}
-                        {acik.bulgu}, Sürüm: {acik.surum}, Güncel Sürüm:{" "}
-                        {acik.guncel_surum}
+                        {/* Renk sınıfını `getClassnameForSeverity` fonksiyonundan alıyoruz */}
+                        <h3 className={getClassnameForSeverity(severity)}>
+                          {/* Eğer ciddiyet "none" ise başlığı "None" olarak yazdır */}
+                          {severity.charAt(0).toUpperCase() + severity.slice(1)}
+                          :
+                        </h3>
+                        <ul>
+                          {findings.map((finding, idx) => (
+                            <li key={idx}>{finding}</li>
+                          ))}
+                        </ul>
                       </li>
-                    ))
-                  )}
-                </ul>
-                <h3>Orta</h3>
-                <ul>
-                  {data.guvenlik_aciklari.orta.length === 0 ? (
-                    <li>Yok</li>
-                  ) : (
-                    data.guvenlik_aciklari.orta.map((acik, index) => (
-                      <li key={index}>{acik}</li>
-                    ))
-                  )}
-                </ul>
-                <h3>Düşük</h3>
-                <ul>
-                  {data.guvenlik_aciklari.dusuk.length === 0 ? (
-                    <li>Yok</li>
-                  ) : (
-                    data.guvenlik_aciklari.dusuk.map((acik, index) => (
-                      <li key={index}>{acik}</li>
-                    ))
+                    )
                   )}
                 </ul>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-bold">Öneriler</TableCell>
+              <TableCell className="font-bold">Impact</TableCell>
+              <TableCell>{data.impact}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold">Recommendations</TableCell>
               <TableCell>
                 <ul>
-                  {data.oneriler.map((oneri, index) => (
-                    <li key={index}>{oneri}</li>
+                  {data.recommendations.map((recommendation, index) => (
+                    <li key={index}>{recommendation}</li>
                   ))}
                 </ul>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-bold">Sonuç</TableCell>
-              <TableCell>{data.sonuc}</TableCell>
+              <TableCell className="font-bold">References</TableCell>
+              <TableCell>
+                <ul>
+                  {data.references.map((reference, index) => (
+                    <li key={index}>
+                      <a
+                        href={reference}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {reference}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
