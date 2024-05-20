@@ -10,6 +10,9 @@ import { Alert, AlertDescription, AlertTitle } from "../../Components/ui/alert";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { Label } from "../../Components/ui/label";
 import { Input } from "@/Components/ui/input";
+import Cookies from "universal-cookie";
+
+const cookie = new Cookies(null, { path: "/" });
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,7 +21,8 @@ const Login = () => {
   // success durumu true olduğunda yönlendirme
   useEffect(() => {
     if (userToken) {
-      navigate("/user/dashboard"); // Yönlendirilecek sayfanın URL'sini buraya ekleyin
+     cookie.set("token", userToken);
+     navigate("/user/dashboard"); // Yönlendirilecek sayfanın URL'sini buraya ekleyin
     }
   }, [userToken, navigate]);
 

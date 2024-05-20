@@ -31,13 +31,17 @@ const Details = () => {
       const response = await getComment(id);
 
       const jsonString = response.message.comment.trim(); // Trim unnecessary whitespace
-      const jsonObject = JSON.parse(jsonString);
+      const jsonStringR = jsonString.substring(jsonString.indexOf("{"));
+      const jsonStringRR = jsonStringR.substring(0, jsonStringR.lastIndexOf("}") + 1);
+      console.log(jsonStringRR);
+      const jsonObject = JSON.parse(jsonStringRR);
       setdata(jsonObject);
     };
     fetchComment();
   }, [id]);
   return (
     <>
+
       {data && (
         <Table className="mt-20 w-4/5 mx-auto text-lg">
           <span className=" absolute top-10 left-20">
@@ -45,11 +49,33 @@ const Details = () => {
               <img src={backIcon} alt="back" className="h-10 w-10" />
             </Link>
           </span>
-          <TableCaption>Report Details</TableCaption>
           <TableBody>
             <TableRow>
               <TableCell className="font-bold">Report Date</TableCell>
-              <TableCell>{data.raport_date.split(" ")[0]}</TableCell>
+              <TableCell>{data.raport_date}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-bold ">Network Information</TableCell>
+              <TableCell>
+                <ul>
+                {data.network_information.map((infos, index) => (
+                  <li>
+                    <ul>
+                      <b>Hostname: </b>{infos.host}
+                    </ul>
+                    <ul>
+                      <b>IP: </b>{infos.ip}
+                    </ul>
+                    <ul>
+                      <b>Ports: </b>
+                      {infos.ports.map((port, idx) => (
+                        <li key={idx}>{port.number}, {port.protocol}, {port.service}</li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+                </ul>
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="font-bold ">Findings</TableCell>
@@ -57,8 +83,7 @@ const Details = () => {
                 <ul>
                   {Object.entries(data.findings).map(
                     ([severity, findings], index) => (
-                      <li key={index}>
-                        {/* Renk sınıfını `getClassnameForSeverity` fonksiyonundan alıyoruz */}
+                      <li key={severity}>
                         <h3 className={getClassnameForSeverity(severity)}>
                           {/* Eğer ciddiyet "none" ise başlığı "None" olarak yazdır */}
                           {severity.charAt(0).toUpperCase() + severity.slice(1)}
@@ -66,7 +91,7 @@ const Details = () => {
                         </h3>
                         <ul>
                           {findings.map((finding, idx) => (
-                            <li key={idx}>{finding}</li>
+                            <li key={idx}><b>{finding.name}:</b> {finding.description}</li>
                           ))}
                         </ul>
                       </li>
@@ -76,34 +101,42 @@ const Details = () => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-bold">Impact</TableCell>
-              <TableCell>{data.impact}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-bold">Recommendations</TableCell>
+              <TableCell className="font-bold ">Recommendations</TableCell>
               <TableCell>
                 <ul>
-                  {data.recommendations.map((recommendation, index) => (
-                    <li key={index}>{recommendation}</li>
-                  ))}
+                  {Object.entries(data.findings).map(
+                    ([severity, findings], index) => (
+                      <li key={severity}>
+                        <ul>
+                          {findings.map((finding, idx) => (
+                            finding.recommendations.map((recommendation, inx) => (
+                            <li key={inx}>{recommendation}</li>
+                          ))
+                          ))}
+                        </ul>
+                      </li>
+                    )
+                  )}
                 </ul>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-bold">References</TableCell>
+              <TableCell className="font-bold ">Resources</TableCell>
               <TableCell>
                 <ul>
-                  {data.references.map((reference, index) => (
-                    <li key={index}>
-                      <a
-                        href={reference}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {reference}
-                      </a>
-                    </li>
-                  ))}
+                  {Object.entries(data.findings).map(
+                    ([severity, findings], index) => (
+                      <li key={severity}>
+                        <ul>
+                          {findings.map((finding, idx) => (
+                            finding.resources.map((resource, inx) => (
+                            <li key={inx}>{resource}</li>
+                          ))
+                          ))}
+                        </ul>
+                      </li>
+                    )
+                  )}
                 </ul>
               </TableCell>
             </TableRow>
