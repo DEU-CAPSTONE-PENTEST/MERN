@@ -33,7 +33,6 @@ const Details = () => {
       const jsonString = response.message.comment.trim(); // Trim unnecessary whitespace
       const jsonStringR = jsonString.substring(jsonString.indexOf("{"));
       const jsonStringRR = jsonStringR.substring(0, jsonStringR.lastIndexOf("}") + 1);
-      console.log(jsonStringRR);
       const jsonObject = JSON.parse(jsonStringRR);
       setdata(jsonObject);
     };
